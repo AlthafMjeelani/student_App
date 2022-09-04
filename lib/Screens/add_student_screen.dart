@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 class AddScreen extends StatelessWidget {
   AddScreen({Key? key}) : super(key: key);
 
-  final bool imageVisibility = false;
   final TextEditingController _userName = TextEditingController();
   final TextEditingController _age = TextEditingController();
   final TextEditingController _mobile = TextEditingController();
@@ -58,13 +57,6 @@ class AddScreen extends StatelessWidget {
                     ),
                     const Text('Add image'),
                   ],
-                ),
-                Visibility(
-                  visible: imageVisibility,
-                  child: const Text(
-                    'please add image',
-                    style: TextStyle(color: Colors.red),
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(15),
@@ -146,12 +138,6 @@ class AddScreen extends StatelessWidget {
                                       .image !=
                                   null) {
                             buttonSubmit(context);
-                          } else {
-                            // setState(
-                            //   () {
-                            //     imageVisibility = false;
-                            //   },
-                            // );
                           }
                         },
                         icon: const Icon(Icons.check),
@@ -189,4 +175,6 @@ class AddScreen extends StatelessWidget {
     addStudent(student);
     Navigator.of(context).pop();
   }
+
+  void dispose(BuildContext conte) {}
 }

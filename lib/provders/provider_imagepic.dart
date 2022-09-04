@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ImagePicProvider with ChangeNotifier {
   File? image;
+  bool? imageVisibility;
   Future<void> getimage() async {
     final pikImage = await ImagePicker().pickImage(
       source: ImageSource.gallery,

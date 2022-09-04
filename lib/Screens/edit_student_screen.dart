@@ -5,11 +5,11 @@ import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
 import 'package:db_sample/Screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../provders/provider_imagepic.dart';
 
+// ignore: must_be_immutable
 class Editscreen extends StatelessWidget {
   Editscreen({
     Key? key,
@@ -25,9 +25,7 @@ class Editscreen extends StatelessWidget {
   final String age;
   final String mobile;
   final String domain;
-  String photo;
-  @override
-  bool imageAlert = false;
+  final String photo;
   late TextEditingController _userName;
   late TextEditingController _age;
   late TextEditingController _mobile;
@@ -77,13 +75,6 @@ class Editscreen extends StatelessWidget {
                     ),
                     const Text('Add image'),
                   ],
-                ),
-                Visibility(
-                  visible: imageAlert,
-                  child: const Text(
-                    'please Upload Image',
-                    style: TextStyle(color: Colors.red),
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(15),
