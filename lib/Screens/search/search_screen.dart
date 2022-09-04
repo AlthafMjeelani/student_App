@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:db_sample/DB/functions/db_function.dart';
-import 'package:db_sample/Screens/widgets/view_profile.dart';
+import 'package:db_sample/Screens/home/view_profile.dart';
 import 'package:flutter/material.dart';
-import '../DB/data_modal.dart';
+import '../../DB/data_modal.dart';
 
 class Search extends SearchDelegate {
   @override

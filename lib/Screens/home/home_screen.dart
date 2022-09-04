@@ -1,8 +1,8 @@
 import 'package:db_sample/DB/functions/db_function.dart';
-import 'package:db_sample/Screens/search_screen.dart';
+import 'package:db_sample/Screens/search/search_screen.dart';
 import 'package:db_sample/Screens/widgets/list_student_widget.dart';
 import 'package:flutter/material.dart';
-import 'add_student_screen.dart';
+import '../add/add_student_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);

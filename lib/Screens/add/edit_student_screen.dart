@@ -3,11 +3,11 @@
 import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
-import 'package:db_sample/Screens/home_screen.dart';
+import 'package:db_sample/Screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../provders/provider_imagepic.dart';
+import '../../provders/provider_imagepic.dart';
 
 // ignore: must_be_immutable
 class Editscreen extends StatelessWidget {

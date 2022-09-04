@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../edit_student_screen.dart';
+import '../add/edit_student_screen.dart';
 
 class ListStudent extends StatelessWidget {
   const ListStudent({

@@ -43,7 +43,6 @@ class AddScreen extends StatelessWidget {
                           ),
                           radius: 60,
                         ),
-                  // }),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

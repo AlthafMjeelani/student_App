@@ -17,8 +17,8 @@ class ImagePicProvider with ChangeNotifier {
       final imageTemp = File(pikImage.path);
 
       image = imageTemp;
-      log("image picked ");
       notifyListeners();
+      log("image picked ");
     }
   }
 }
