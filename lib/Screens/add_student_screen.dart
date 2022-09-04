@@ -1,31 +1,14 @@
 import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
+import 'package:db_sample/provders/provider_imagepic.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class AddScreen extends StatefulWidget {
-  const AddScreen({Key? key}) : super(key: key);
-  @override
-  State<AddScreen> createState() => _AddScreenState();
-}
+class AddScreen extends StatelessWidget {
+  AddScreen({Key? key}) : super(key: key);
 
-class _AddScreenState extends State<AddScreen> {
-  File? _image;
-
-  Future<void> getimage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) {
-      return;
-    } else {
-      final imageTemp = File(image.path);
-      setState(() {
-        _image = imageTemp;
-      });
-    }
-  }
-
-  bool imageVisibility = false;
+  final bool imageVisibility = false;
   final TextEditingController _userName = TextEditingController();
   final TextEditingController _age = TextEditingController();
   final TextEditingController _mobile = TextEditingController();
@@ -44,7 +27,7 @@ class _AddScreenState extends State<AddScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 20),
-                  child: _image == null
+                  child: context.watch<ImagePicProvider>().image == null
                       ? const CircleAvatar(
                           backgroundColor: Colors.black38,
                           radius: 60,
@@ -52,17 +35,24 @@ class _AddScreenState extends State<AddScreen> {
                         )
                       : CircleAvatar(
                           backgroundImage: FileImage(
-                            File(_image!.path),
+                            File(
+                              Provider.of<ImagePicProvider>(context,
+                                      listen: false)
+                                  .image!
+                                  .path,
+                            ),
                           ),
                           radius: 60,
                         ),
+                  // }),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: () {
-                        getimage();
+                        Provider.of<ImagePicProvider>(context, listen: false)
+                            .getimage();
                       },
                       icon: const Icon(Icons.image),
                     ),
@@ -151,20 +141,17 @@ class _AddScreenState extends State<AddScreen> {
                       ElevatedButton.icon(
                         onPressed: () {
                           if (formKey.currentState!.validate() &&
-                              _image != null) {
-                            buttonSubmit();
-                          } else if (_image?.path == null) {
-                            setState(
-                              () {
-                                imageVisibility = true;
-                              },
-                            );
+                              Provider.of<ImagePicProvider>(context,
+                                          listen: false)
+                                      .image !=
+                                  null) {
+                            buttonSubmit(context);
                           } else {
-                            setState(
-                              () {
-                                imageVisibility = false;
-                              },
-                            );
+                            // setState(
+                            //   () {
+                            //     imageVisibility = false;
+                            //   },
+                            // );
                           }
                         },
                         icon: const Icon(Icons.check),
@@ -181,12 +168,15 @@ class _AddScreenState extends State<AddScreen> {
     );
   }
 
-  Future<void> buttonSubmit() async {
+  Future<void> buttonSubmit(BuildContext context) async {
     if (_userName.text.isEmpty ||
         _age.text.isEmpty ||
         _mobile.text.isEmpty ||
         _domain.text.isEmpty ||
-        _image!.path.isEmpty) {
+        Provider.of<ImagePicProvider>(context, listen: false)
+            .image!
+            .path
+            .isEmpty) {
       return;
     }
     final student = StudentModel(
@@ -194,7 +184,8 @@ class _AddScreenState extends State<AddScreen> {
         age: _age.text,
         mobilenumber: _mobile.text,
         domain: _domain.text,
-        photo: _image!.path);
+        photo:
+            Provider.of<ImagePicProvider>(context, listen: false).image!.path);
     addStudent(student);
     Navigator.of(context).pop();
   }

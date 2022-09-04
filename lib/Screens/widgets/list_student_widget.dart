@@ -4,15 +4,9 @@ import 'package:db_sample/Screens/widgets/view_profile.dart';
 import 'package:flutter/material.dart';
 import '../../DB/data_modal.dart';
 
-class ListStudentWidget extends StatefulWidget {
-  const ListStudentWidget({Key? key}) : super(key: key);
-  @override
-  State<ListStudentWidget> createState() => _ListStudentWidgetState();
-}
+class ListStudentWidget extends StatelessWidget {
+  const ListStudentWidget({super.key});
 
-File? image;
-
-class _ListStudentWidgetState extends State<ListStudentWidget> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(

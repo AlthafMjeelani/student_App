@@ -1,11 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
 import 'package:db_sample/Screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
-class Editscreen extends StatefulWidget {
+import '../provders/provider_imagepic.dart';
+
+class Editscreen extends StatelessWidget {
   Editscreen({
     Key? key,
     required this.index,
@@ -22,41 +27,20 @@ class Editscreen extends StatefulWidget {
   final String domain;
   String photo;
   @override
-  State<Editscreen> createState() => _AddScreenState();
-}
-
-class _AddScreenState extends State<Editscreen> {
-  Future<void> getimage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) {
-      return;
-    } else {
-      final imageTemp = File(image.path);
-      setState(
-        () {
-          widget.photo = imageTemp.path;
-        },
-      );
-    }
-  }
-
   bool imageAlert = false;
   late TextEditingController _userName;
   late TextEditingController _age;
   late TextEditingController _mobile;
   late TextEditingController _domain;
-  @override
-  void initState() {
-    _userName = TextEditingController(text: widget.name);
-    _age = TextEditingController(text: widget.age);
-    _mobile = TextEditingController(text: widget.mobile);
-    _domain = TextEditingController(text: widget.domain);
-    super.initState();
-  }
 
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    _userName = TextEditingController(text: name);
+    _age = TextEditingController(text: age);
+    _mobile = TextEditingController(text: mobile);
+    _domain = TextEditingController(text: domain);
+
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -68,9 +52,16 @@ class _AddScreenState extends State<Editscreen> {
                 Padding(
                     padding: const EdgeInsets.only(top: 20, left: 20),
                     child: CircleAvatar(
-                      backgroundImage: FileImage(
-                        File(widget.photo),
-                      ),
+                      backgroundImage: FileImage(File(
+                        Provider.of<ImagePicProvider>(context, listen: true)
+                                    .image ==
+                                null
+                            ? photo
+                            : Provider.of<ImagePicProvider>(context,
+                                    listen: false)
+                                .image!
+                                .path,
+                      )),
                       radius: 60,
                       child: const Icon(Icons.image),
                     )),
@@ -79,7 +70,8 @@ class _AddScreenState extends State<Editscreen> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        getimage();
+                        Provider.of<ImagePicProvider>(context, listen: false)
+                            .getimage();
                       },
                       icon: const Icon(Icons.image),
                     ),
@@ -168,7 +160,7 @@ class _AddScreenState extends State<Editscreen> {
                       ElevatedButton.icon(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            buttonSubmit();
+                            buttonSubmit(context);
                           }
                         },
                         icon: const Icon(Icons.check),
@@ -185,19 +177,19 @@ class _AddScreenState extends State<Editscreen> {
     );
   }
 
-  Future<void> buttonSubmit() async {
+  Future<void> buttonSubmit(BuildContext context) async {
     final student = StudentModel(
       username: _userName.text,
       age: _age.text,
       mobilenumber: _mobile.text,
       domain: _domain.text,
-      photo: widget.photo,
+      photo:
+          Provider.of<ImagePicProvider>(context, listen: false).image?.path ??
+              photo,
     );
 
-    await updateList(widget.index, student);
-    if (!mounted) {
-      return;
-    }
+    await updateList(index, student);
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const HomePage(),
