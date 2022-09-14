@@ -34,6 +34,15 @@ class Editscreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) {
+    //     _userName = TextEditingController(text: name);
+    //     _age = TextEditingController(text: age);
+    //     _mobile = TextEditingController(text: mobile);
+    //     _domain = TextEditingController(text: domain);
+    //   },
+    // );
+
     _userName = TextEditingController(text: name);
     _age = TextEditingController(text: age);
     _mobile = TextEditingController(text: mobile);
@@ -179,11 +188,11 @@ class Editscreen extends StatelessWidget {
               photo,
     );
 
-    await updateList(index, student);
+    await DbFunctions().updateList(index, student);
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => const HomePage(),
+          builder: (context) => HomePage(),
         ),
         (route) => false);
   }

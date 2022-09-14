@@ -2,27 +2,29 @@ import 'dart:io';
 import 'package:db_sample/DB/functions/db_function.dart';
 import 'package:db_sample/Screens/widgets/delete_item.dart';
 import 'package:db_sample/Screens/home/view_profile.dart';
+import 'package:db_sample/provders/search_provider.dart';
 import 'package:flutter/material.dart';
-import '../../DB/data_modal.dart';
+import 'package:provider/provider.dart';
+
+import '../../provders/delete_list.dart';
 
 class ListStudentWidget extends StatelessWidget {
   const ListStudentWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: studentListnotifire,
+    return Consumer<DbFunctions>(
       builder:
-          (BuildContext ctx, List<StudentModel> studentList, Widget? child) {
+          (BuildContext ctx, DbFunctions providerStudentList, Widget? child) {
         return Container(
           margin: const EdgeInsets.only(top: 20),
-          child: studentList.isEmpty
+          child: providerStudentList.studentList.isEmpty
               ? const Center(
                   child: Text('No Data'),
                 )
               : ListView.separated(
                   itemBuilder: (context, index) {
-                    final data = studentList[index];
+                    final data = providerStudentList.studentList[index];
                     return ListTile(
                       leading: CircleAvatar(
                         radius: 30,
@@ -57,7 +59,8 @@ class ListStudentWidget extends StatelessWidget {
                   separatorBuilder: (context, index) {
                     return const Divider();
                   },
-                  itemCount: studentList.length),
+                  itemCount: providerStudentList.studentList.length,
+                ),
         );
       },
     );

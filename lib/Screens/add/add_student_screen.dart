@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
@@ -171,9 +172,12 @@ class AddScreen extends StatelessWidget {
         domain: _domain.text,
         photo:
             Provider.of<ImagePicProvider>(context, listen: false).image!.path);
-    addStudent(student);
+
+    Provider.of<DbFunctions>(context, listen: false)
+        .addStudent(student)
+        .then((value) => context.read<ImagePicProvider>().image = null);
+    log('saved');
+
     Navigator.of(context).pop();
   }
-
-  void dispose(BuildContext conte) {}
 }
