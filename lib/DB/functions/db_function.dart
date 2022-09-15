@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../data_modal.dart';
 
 class DbFunctions with ChangeNotifier {
-  List<StudentModel> studentList = [];
+  static List<StudentModel> studentList = [];
 
   Future<void> createDatabase() async {
     await Hive.initFlutter();
@@ -27,11 +27,11 @@ class DbFunctions with ChangeNotifier {
     getAllStudents();
   }
 
-  Future<void> getAllStudents() async {
+  Future<List<StudentModel>> getAllStudents() async {
     final studentDB = await Hive.openBox<StudentModel>('student_db');
     studentList.clear();
     studentList.addAll(studentDB.values);
-    notifyListeners();
+    return studentList;
   }
 
   Future<void> updateList(int id, StudentModel value) async {
@@ -40,9 +40,9 @@ class DbFunctions with ChangeNotifier {
     getAllStudents();
   }
 
-  Future<void> deleteList(int index) async {
+  Future<void> deleteList(String index) async {
     final studentDB = await Hive.openBox<StudentModel>('student_db');
-    await studentDB.deleteAt(index);
+    await studentDB.delete(index);
     getAllStudents();
   }
 }

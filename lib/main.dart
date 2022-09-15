@@ -1,5 +1,6 @@
 import 'package:db_sample/DB/functions/db_function.dart';
 import 'package:db_sample/Screens/home/home_screen.dart';
+import 'package:db_sample/provders/delete_list.dart';
 import 'package:db_sample/provders/provider_imagepic.dart';
 import 'package:db_sample/provders/search_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +19,12 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => DbFunctions(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => SearchProvider(),
-        // ),
+        ChangeNotifierProvider(
+          create: (_) => SearchProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Visible(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),

@@ -32,17 +32,10 @@ class Editscreen extends StatelessWidget {
   late TextEditingController _domain;
 
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) {
-    //     _userName = TextEditingController(text: name);
-    //     _age = TextEditingController(text: age);
-    //     _mobile = TextEditingController(text: mobile);
-    //     _domain = TextEditingController(text: domain);
-    //   },
-    // );
-
+    final StudentModel studentmodel;
     _userName = TextEditingController(text: name);
     _age = TextEditingController(text: age);
     _mobile = TextEditingController(text: mobile);
@@ -160,7 +153,7 @@ class Editscreen extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            buttonSubmit(context);
+                            buttonSubmit(context, index.toString());
                           }
                         },
                         icon: const Icon(Icons.check),
@@ -177,7 +170,7 @@ class Editscreen extends StatelessWidget {
     );
   }
 
-  Future<void> buttonSubmit(BuildContext context) async {
+  Future<void> buttonSubmit(BuildContext context, String id) async {
     final student = StudentModel(
       username: _userName.text,
       age: _age.text,
@@ -186,13 +179,14 @@ class Editscreen extends StatelessWidget {
       photo:
           Provider.of<ImagePicProvider>(context, listen: false).image?.path ??
               photo,
+      id: id,
     );
 
-    await DbFunctions().updateList(index, student);
+    Provider.of<DbFunctions>(context, listen: false).updateList(index, student);
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => const HomePage(),
         ),
         (route) => false);
   }

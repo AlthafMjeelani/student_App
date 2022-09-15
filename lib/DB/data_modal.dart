@@ -13,8 +13,11 @@ class StudentModel {
   final String domain;
   @HiveField(4)
   final String photo;
+  @HiveField(5)
+  String? id;
 
   StudentModel({
+    required this.id,
     required this.username,
     required this.age,
     required this.mobilenumber,

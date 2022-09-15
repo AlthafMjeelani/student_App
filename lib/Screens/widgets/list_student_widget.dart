@@ -1,30 +1,30 @@
+import 'dart:developer';
 import 'dart:io';
-import 'package:db_sample/DB/functions/db_function.dart';
-import 'package:db_sample/Screens/widgets/delete_item.dart';
 import 'package:db_sample/Screens/home/view_profile.dart';
+import 'package:db_sample/Screens/widgets/delete_list_item.dart';
 import 'package:db_sample/provders/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../provders/delete_list.dart';
 
 class ListStudentWidget extends StatelessWidget {
   const ListStudentWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DbFunctions>(
-      builder:
-          (BuildContext ctx, DbFunctions providerStudentList, Widget? child) {
-        return Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: providerStudentList.studentList.isEmpty
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      child: Consumer<SearchProvider>(
+        builder: (BuildContext context, SearchProvider value, Widget? child) {
+          return value.foundData.isEmpty
               ? const Center(
                   child: Text('No Data'),
                 )
               : ListView.separated(
-                  itemBuilder: (context, index) {
-                    final data = providerStudentList.studentList[index];
+                  itemBuilder: (
+                    context,
+                    index,
+                  ) {
+                    final data = value.foundData[index];
                     return ListTile(
                       leading: CircleAvatar(
                         radius: 30,
@@ -35,7 +35,9 @@ class ListStudentWidget extends StatelessWidget {
                       title: Text(data.username),
                       trailing: IconButton(
                         onPressed: () {
-                          Delete().deleteItem(context, index);
+                          DeleteItemList()
+                              .deleteItem(context, index, data.id.toString());
+                          log('delete called');
                         },
                         icon: const Icon(Icons.delete),
                         color: Colors.red,
@@ -59,10 +61,10 @@ class ListStudentWidget extends StatelessWidget {
                   separatorBuilder: (context, index) {
                     return const Divider();
                   },
-                  itemCount: providerStudentList.studentList.length,
-                ),
-        );
-      },
+                  itemCount: value.foundData.length,
+                );
+        },
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
 import 'package:db_sample/provders/provider_imagepic.dart';
+import 'package:db_sample/provders/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ class AddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageprovider = Provider.of<ImagePicProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -27,7 +29,9 @@ class AddScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 20),
-                  child: context.watch<ImagePicProvider>().image == null
+                  child: Provider.of<ImagePicProvider>(context, listen: true)
+                              .image ==
+                          null
                       ? const CircleAvatar(
                           backgroundColor: Colors.black38,
                           radius: 60,
@@ -36,22 +40,30 @@ class AddScreen extends StatelessWidget {
                       : CircleAvatar(
                           backgroundImage: FileImage(
                             File(
-                              Provider.of<ImagePicProvider>(context,
-                                      listen: false)
-                                  .image!
-                                  .path,
+                              imageprovider.image!.path,
                             ),
                           ),
                           radius: 60,
                         ),
                 ),
+                Consumer<ImagePicProvider>(
+                    builder: (BuildContext context, value, Widget? child) {
+                  return Visibility(
+                    visible: value.imageVisibility,
+                    child: const Center(
+                      child: Text(
+                        'Please add Image',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  );
+                }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: () {
-                        Provider.of<ImagePicProvider>(context, listen: false)
-                            .getimage();
+                        imageprovider.getimage();
                       },
                       icon: const Icon(Icons.image),
                     ),
@@ -133,11 +145,15 @@ class AddScreen extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           if (formKey.currentState!.validate() &&
-                              Provider.of<ImagePicProvider>(context,
-                                          listen: false)
-                                      .image !=
-                                  null) {
+                              imageprovider.image != null) {
                             buttonSubmit(context);
+                            imageprovider.imageVisibility = false;
+                          } else {
+                            if (imageprovider.image != null) {
+                              imageprovider.isVisible(imageprovider.image);
+                            } else {
+                              imageprovider.isVisible(imageprovider.image);
+                            }
                           }
                         },
                         icon: const Icon(Icons.check),
@@ -155,6 +171,8 @@ class AddScreen extends StatelessWidget {
   }
 
   Future<void> buttonSubmit(BuildContext context) async {
+    final imageprovider = Provider.of<ImagePicProvider>(context, listen: false);
+    final finctionprovider = Provider.of<DbFunctions>(context, listen: false);
     if (_userName.text.isEmpty ||
         _age.text.isEmpty ||
         _mobile.text.isEmpty ||
@@ -166,18 +184,19 @@ class AddScreen extends StatelessWidget {
       return;
     }
     final student = StudentModel(
-        username: _userName.text,
-        age: _age.text,
-        mobilenumber: _mobile.text,
-        domain: _domain.text,
-        photo:
-            Provider.of<ImagePicProvider>(context, listen: false).image!.path);
+      username: _userName.text,
+      age: _age.text,
+      mobilenumber: _mobile.text,
+      domain: _domain.text,
+      photo: imageprovider.image!.path,
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+    );
 
-    Provider.of<DbFunctions>(context, listen: false)
+    finctionprovider
         .addStudent(student)
-        .then((value) => context.read<ImagePicProvider>().image = null);
+        .then((value) => imageprovider.image = null);
     log('saved');
-
+    Provider.of<SearchProvider>(context, listen: false).getAll();
     Navigator.of(context).pop();
   }
 }
