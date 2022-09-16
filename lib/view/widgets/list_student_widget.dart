@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ListStudentWidget extends StatelessWidget {
-  const ListStudentWidget({super.key});
-
+  const ListStudentWidget({
+    super.key,
+    required this.controller,
+  });
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,8 +38,12 @@ class ListStudentWidget extends StatelessWidget {
                       title: Text(data.username),
                       trailing: IconButton(
                         onPressed: () {
-                          DeleteItemList()
-                              .deleteItem(context, index, data.id.toString());
+                          DeleteItemList.deleteItem(
+                            context,
+                            data.id.toString(),
+                            controller,
+                          );
+
                           log('delete called');
                         },
                         icon: const Icon(Icons.delete),
@@ -52,6 +59,7 @@ class ListStudentWidget extends StatelessWidget {
                               mobile: data.mobilenumber,
                               photo: data.photo,
                               index: index,
+                              id: data.id.toString(),
                             ),
                           ),
                         );

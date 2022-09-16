@@ -2,10 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
-import 'package:db_sample/provders/provider_imagepic.dart';
-import 'package:db_sample/provders/search_provider.dart';
+import 'package:db_sample/providers/provider_imagepic.dart';
+import 'package:db_sample/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/add_screen_widget.dart';
 
 class AddScreen extends StatelessWidget {
   AddScreen({Key? key}) : super(key: key);
@@ -75,69 +77,14 @@ class AddScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      AddTextFormFeild(
+                        userName: _userName,
+                        age: _age,
+                        mobile: _mobile,
+                        domain: _domain,
+                      ),
                       const SizedBox(
                         height: 40,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Username is Empty';
-                          }
-                          return null;
-                        },
-                        controller: _userName,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'FullName'),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length > 2) {
-                            return 'Age is Not correct formate';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        controller: _age,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(), labelText: 'Age'),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length != 10) {
-                            return 'please enter 10 numbers';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        controller: _mobile,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Mobile Number'),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'domain is Empty';
-                          }
-                          return null;
-                        },
-                        controller: _domain,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(), labelText: 'Domain'),
                       ),
                       const SizedBox(
                         height: 40,
@@ -197,6 +144,16 @@ class AddScreen extends StatelessWidget {
         .then((value) => imageprovider.image = null);
     log('saved');
     Provider.of<SearchProvider>(context, listen: false).getAll();
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      duration: Duration(seconds: 1),
+      elevation: 20,
+      content: Text(
+        'Records successfully Added',
+      ),
+      backgroundColor: Colors.green,
+    ));
+
     Navigator.of(context).pop();
   }
 }

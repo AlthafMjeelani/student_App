@@ -19,6 +19,7 @@ class Editscreen extends StatelessWidget {
     required this.mobile,
     required this.domain,
     required this.photo,
+    required this.id,
   }) : super(key: key);
   final int index;
   final String name;
@@ -26,6 +27,7 @@ class Editscreen extends StatelessWidget {
   final String mobile;
   final String domain;
   final String photo;
+  final String id;
   late TextEditingController _userName;
   late TextEditingController _age;
   late TextEditingController _mobile;
@@ -35,7 +37,6 @@ class Editscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StudentModel studentmodel;
     _userName = TextEditingController(text: name);
     _age = TextEditingController(text: age);
     _mobile = TextEditingController(text: mobile);
@@ -63,7 +64,6 @@ class Editscreen extends StatelessWidget {
                                 .path,
                       )),
                       radius: 60,
-                      child: const Icon(Icons.image),
                     )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -153,7 +153,7 @@ class Editscreen extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
-                            buttonSubmit(context, index.toString());
+                            buttonSubmit(context);
                           }
                         },
                         icon: const Icon(Icons.check),
@@ -170,7 +170,9 @@ class Editscreen extends StatelessWidget {
     );
   }
 
-  Future<void> buttonSubmit(BuildContext context, String id) async {
+  Future<void> buttonSubmit(
+    BuildContext context,
+  ) async {
     final student = StudentModel(
       username: _userName.text,
       age: _age.text,

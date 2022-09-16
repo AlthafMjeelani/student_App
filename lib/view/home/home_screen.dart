@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:db_sample/Screens/widgets/list_student_widget.dart';
-import 'package:db_sample/provders/delete_list.dart';
 import 'package:db_sample/provders/provider_imagepic.dart';
 import 'package:db_sample/provders/search_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,20 +8,21 @@ import '../add/add_student_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final searchProvider = context.read<SearchProvider>();
+    final searchProvider = Provider.of<SearchProvider>(context, listen: false);
     log(' build called');
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        Provider.of<SearchProvider>(context, listen: false).searchFilter('');
         searchProvider.getAll();
       },
     );
-
+    final TextEditingController searchController = TextEditingController();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -69,8 +69,8 @@ class HomePage extends StatelessWidget {
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: searchController,
                           onChanged: (value) {
-                            //context.read<SearchProvider>().searchFilter(value);
                             searchProvider.searchFilter(value);
                           },
                           decoration: const InputDecoration(
@@ -81,8 +81,10 @@ class HomePage extends StatelessWidget {
                         ),
                       )
                     : const SizedBox(),
-                const Expanded(
-                  child: ListStudentWidget(),
+                Expanded(
+                  child: ListStudentWidget(
+                    controller: searchController,
+                  ),
                 ),
               ],
             );

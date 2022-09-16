@@ -1,11 +1,11 @@
-import 'package:db_sample/DB/data_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provders/search_provider.dart';
 
 class DeleteItemList {
-  Future<void> deleteItem(BuildContext context, int index, String id) async {
+  static Future<void> deleteItem(BuildContext context, String index,
+      TextEditingController controller) async {
     showDialog(
       context: context,
       builder: (ctx) {
@@ -21,7 +21,8 @@ class DeleteItemList {
             TextButton(
               onPressed: () {
                 Provider.of<SearchProvider>(context, listen: false)
-                    .deleteData(id, index);
+                    .deleteData(index.toString());
+                controller.clear();
                 Provider.of<SearchProvider>(context, listen: false).getAll();
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   duration: Duration(seconds: 1),

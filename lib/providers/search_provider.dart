@@ -15,13 +15,7 @@ class SearchProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteData(String id, int index) async {
-    await DbFunctions().deleteList(id);
-    log('deleted  oook');
-    notifyListeners();
-  }
-
-  void searchFilter([String enteredKeyword = '']) {
+  void searchFilter(String enteredKeyword) {
     List<StudentModel> results = [];
     if (enteredKeyword.isEmpty) {
       log("keyword empty");
@@ -46,6 +40,17 @@ class SearchProvider with ChangeNotifier {
     } else {
       visible = true;
     }
+    notifyListeners();
+  }
+
+  Future<void> deleteData(String id) async {
+    if (id.isEmpty) {
+      log('null');
+    } else {
+      await DbFunctions().deleteList(id.toString());
+      log('deleted  oook');
+    }
+
     notifyListeners();
   }
 }

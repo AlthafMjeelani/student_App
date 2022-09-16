@@ -11,6 +11,7 @@ class ListStudent extends StatelessWidget {
     required this.domain,
     required this.photo,
     required this.index,
+    required this.id,
   }) : super(key: key);
   final String name;
   final String age;
@@ -18,6 +19,7 @@ class ListStudent extends StatelessWidget {
   final String domain;
   final String photo;
   final int index;
+  final String id;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,10 +45,11 @@ class ListStudent extends StatelessWidget {
                           width: 350,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: FileImage(
-                                  File(photo),
-                                ),
-                                fit: BoxFit.fill),
+                              image: FileImage(
+                                File(photo),
+                              ),
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       ),
@@ -92,6 +95,7 @@ class ListStudent extends StatelessWidget {
                                 domain: domain,
                                 mobile: mobile,
                                 photo: photo,
+                                id: id,
                               ),
                             ),
                           );

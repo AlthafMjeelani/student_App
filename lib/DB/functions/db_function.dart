@@ -21,7 +21,7 @@ class DbFunctions with ChangeNotifier {
 
   Future<void> addStudent(StudentModel value) async {
     final studentDB = await Hive.openBox<StudentModel>('student_db');
-    await studentDB.add(value);
+    await studentDB.put(value.id, value);
     studentList.add(value);
     log(' data added');
     getAllStudents();
@@ -40,9 +40,9 @@ class DbFunctions with ChangeNotifier {
     getAllStudents();
   }
 
-  Future<void> deleteList(String index) async {
+  Future<void> deleteList(String key) async {
     final studentDB = await Hive.openBox<StudentModel>('student_db');
-    await studentDB.delete(index);
+    await studentDB.delete(key);
     getAllStudents();
   }
 }
