@@ -1,7 +1,8 @@
+import 'package:db_sample/view/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provders/search_provider.dart';
+import '../../providers/search_provider.dart';
 
 class DeleteItemList {
   static Future<void> deleteItem(BuildContext context, String index,
@@ -24,14 +25,7 @@ class DeleteItemList {
                     .deleteData(index.toString());
                 controller.clear();
                 Provider.of<SearchProvider>(context, listen: false).getAll();
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  duration: Duration(seconds: 1),
-                  elevation: 20,
-                  content: Text(
-                    'Records successfully deleted',
-                  ),
-                  backgroundColor: Colors.green,
-                ));
+                SnackBarWidget().show(context, 'Records successfully Deleted');
 
                 Navigator.pop(context);
               },

@@ -4,7 +4,7 @@ import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
 import 'package:flutter/cupertino.dart';
 
-class SearchProvider with ChangeNotifier {
+class SearchProvider extends ChangeNotifier {
   final List<StudentModel> allData = DbFunctions.studentList;
   bool visible = false;
   List<StudentModel> foundData = [];

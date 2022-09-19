@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImagePicProvider with ChangeNotifier {
+class ImagePicProvider extends ChangeNotifier {
   File? image;
   bool imageVisibility = false;
   Future<void> getimage() async {

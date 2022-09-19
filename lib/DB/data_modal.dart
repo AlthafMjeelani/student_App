@@ -14,7 +14,7 @@ class StudentModel {
   @HiveField(4)
   final String photo;
   @HiveField(5)
-  String id;
+  String? id;
 
   StudentModel({
     required this.id,

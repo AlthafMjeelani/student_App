@@ -1,7 +1,7 @@
 import 'package:db_sample/DB/functions/db_function.dart';
-import 'package:db_sample/Screens/home/home_screen.dart';
-import 'package:db_sample/provders/provider_imagepic.dart';
-import 'package:db_sample/provders/search_provider.dart';
+import 'package:db_sample/view/home/home_screen.dart';
+import 'package:db_sample/providers/provider_imagepic.dart';
+import 'package:db_sample/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

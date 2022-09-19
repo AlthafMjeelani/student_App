@@ -2,15 +2,38 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:db_sample/DB/data_modal.dart';
 import 'package:db_sample/DB/functions/db_function.dart';
+import 'package:db_sample/DB/model/enum.dart';
 import 'package:db_sample/providers/provider_imagepic.dart';
 import 'package:db_sample/providers/search_provider.dart';
+import 'package:db_sample/view/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../home/home_screen.dart';
+import '../widgets/add_screen_image_widget.dart';
 import '../widgets/add_screen_widget.dart';
 
 class AddScreen extends StatelessWidget {
-  AddScreen({Key? key}) : super(key: key);
+  AddScreen({
+    Key? key,
+    this.name,
+    this.age,
+    this.mobile,
+    this.domain,
+    this.photo,
+    this.id,
+    required this.type,
+    this.index,
+  }) : super(key: key);
+
+  final String? name;
+  final String? age;
+  final String? mobile;
+  final String? domain;
+  final String? photo;
+  final String? id;
+  int? index;
+  final Actiontype type;
 
   final TextEditingController _userName = TextEditingController();
   final TextEditingController _age = TextEditingController();
@@ -20,7 +43,17 @@ class AddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (type == Actiontype.editScreen) {
+      _userName.text = name.toString();
+      _age.text = age.toString();
+      _mobile.text = mobile.toString();
+      _domain.text = domain.toString();
+    }
     final imageprovider = Provider.of<ImagePicProvider>(context, listen: false);
+    if (type == Actiontype.addScreen) {
+      imageprovider.image == null;
+    }
+    imageprovider.imageVisibility = false;
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -29,24 +62,10 @@ class AddScreen extends StatelessWidget {
             key: formKey,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20),
-                  child: Provider.of<ImagePicProvider>(context, listen: true)
-                              .image ==
-                          null
-                      ? const CircleAvatar(
-                          backgroundColor: Colors.black38,
-                          radius: 60,
-                          child: Icon(Icons.image),
-                        )
-                      : CircleAvatar(
-                          backgroundImage: FileImage(
-                            File(
-                              imageprovider.image!.path,
-                            ),
-                          ),
-                          radius: 60,
-                        ),
+                AddScreenImageWidget(
+                  imageprovider: imageprovider,
+                  photo: photo.toString(),
+                  type: type,
                 ),
                 Consumer<ImagePicProvider>(
                     builder: (BuildContext context, value, Widget? child) {
@@ -86,20 +105,24 @@ class AddScreen extends StatelessWidget {
                       const SizedBox(
                         height: 40,
                       ),
-                      const SizedBox(
-                        height: 40,
-                      ),
                       ElevatedButton.icon(
                         onPressed: () {
-                          if (formKey.currentState!.validate() &&
-                              imageprovider.image != null) {
-                            buttonSubmit(context);
-                            imageprovider.imageVisibility = false;
-                          } else {
-                            if (imageprovider.image != null) {
-                              imageprovider.isVisible(imageprovider.image);
+                          if (type == Actiontype.addScreen) {
+                            if (formKey.currentState!.validate() &&
+                                imageprovider.image != null) {
+                              buttonSubmit(context);
+                              imageprovider.imageVisibility = false;
                             } else {
-                              imageprovider.isVisible(imageprovider.image);
+                              if (imageprovider.image != null) {
+                                imageprovider.isVisible(imageprovider.image);
+                              } else {
+                                imageprovider.isVisible(imageprovider.image);
+                              }
+                            }
+                          } else {
+                            if (formKey.currentState!.validate()) {
+                              buttonSubmit(context);
+                              imageprovider.imageVisibility = false;
                             }
                           }
                         },
@@ -120,40 +143,37 @@ class AddScreen extends StatelessWidget {
   Future<void> buttonSubmit(BuildContext context) async {
     final imageprovider = Provider.of<ImagePicProvider>(context, listen: false);
     final finctionprovider = Provider.of<DbFunctions>(context, listen: false);
-    if (_userName.text.isEmpty ||
-        _age.text.isEmpty ||
-        _mobile.text.isEmpty ||
-        _domain.text.isEmpty ||
-        Provider.of<ImagePicProvider>(context, listen: false)
-            .image!
-            .path
-            .isEmpty) {
-      return;
-    }
+
     final student = StudentModel(
       username: _userName.text,
       age: _age.text,
       mobilenumber: _mobile.text,
       domain: _domain.text,
-      photo: imageprovider.image!.path,
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      photo: imageprovider.image?.path ?? photo.toString(),
+      id: type == Actiontype.addScreen
+          ? DateTime.now().microsecondsSinceEpoch.toString()
+          : id.toString(),
     );
+    type == Actiontype.addScreen
+        ? finctionprovider
+            .addStudent(student)
+            .then((value) => imageprovider.image = null)
+        : finctionprovider
+            .updateList(index!.toInt(), student)
+            .then((value) => imageprovider.image = null);
 
-    finctionprovider
-        .addStudent(student)
-        .then((value) => imageprovider.image = null);
+    if (type == Actiontype.editScreen) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+          (route) => false);
+      SnackBarWidget().show(context, 'Records successfully Edited');
+    } else {
+      Provider.of<SearchProvider>(context, listen: false).getAll();
+      SnackBarWidget().show(context, 'Records successfully Added');
+      Navigator.of(context).pop();
+    }
     log('saved');
-    Provider.of<SearchProvider>(context, listen: false).getAll();
-
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      duration: Duration(seconds: 1),
-      elevation: 20,
-      content: Text(
-        'Records successfully Added',
-      ),
-      backgroundColor: Colors.green,
-    ));
-
-    Navigator.of(context).pop();
   }
 }

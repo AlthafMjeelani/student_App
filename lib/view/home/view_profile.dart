@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:db_sample/DB/model/enum.dart';
+import 'package:db_sample/view/add/add_student_screen.dart';
 import 'package:flutter/material.dart';
-import '../add/edit_student_screen.dart';
 
 class ListStudent extends StatelessWidget {
   const ListStudent({
@@ -88,14 +89,15 @@ class ListStudent extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => Editscreen(
-                                index: index,
+                              builder: (context) => AddScreen(
                                 name: name,
                                 age: age,
                                 domain: domain,
                                 mobile: mobile,
                                 photo: photo,
-                                id: id,
+                                id: id.toString(),
+                                type: Actiontype.editScreen,
+                                index: index,
                               ),
                             ),
                           );

@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:db_sample/Screens/home/view_profile.dart';
-import 'package:db_sample/Screens/widgets/delete_list_item.dart';
-import 'package:db_sample/provders/search_provider.dart';
+import 'package:db_sample/view/home/view_profile.dart';
+import 'package:db_sample/view/widgets/delete_list_item.dart';
+import 'package:db_sample/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

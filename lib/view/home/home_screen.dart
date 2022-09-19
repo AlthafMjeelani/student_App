@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:db_sample/Screens/widgets/list_student_widget.dart';
-import 'package:db_sample/provders/provider_imagepic.dart';
-import 'package:db_sample/provders/search_provider.dart';
+import 'package:db_sample/DB/model/enum.dart';
+import 'package:db_sample/view/widgets/list_student_widget.dart';
+import 'package:db_sample/providers/provider_imagepic.dart';
+import 'package:db_sample/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import '../add/add_student_screen.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,6 @@ class HomePage extends StatelessWidget {
   const HomePage({
     Key? key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final searchProvider = Provider.of<SearchProvider>(context, listen: false);
@@ -29,7 +29,9 @@ class HomePage extends StatelessWidget {
           context.read<ImagePicProvider>().image = null;
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (cxt) => AddScreen(),
+              builder: (cxt) => AddScreen(
+                type: Actiontype.addScreen,
+              ),
             ),
           );
         },
